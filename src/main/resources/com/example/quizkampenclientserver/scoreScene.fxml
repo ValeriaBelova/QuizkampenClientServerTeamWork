@@ -7,12 +7,12 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane prefHeight="500.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.quizkampenclientserver.scoreController">
    <children>
       <Pane prefHeight="500.0" prefWidth="321.0" style="-fx-background-color: blue;">
          <children>
-            <Label layoutX="32.0" layoutY="21.0" text="Player 1" textFill="WHITE" />
-            <Label layoutX="242.0" layoutY="21.0" text="Player 2" textFill="WHITE" />
+            <Label fx:id="player1Label" layoutX="32.0" layoutY="21.0" text="Player 1" textFill="WHITE" />
+            <Label fx:id="Player2Label" layoutX="242.0" layoutY="21.0" text="Player 2" textFill="WHITE" />
             <Label layoutX="128.0" layoutY="110.0" text="Category 1" textFill="WHITE" />
             <Label layoutX="128.0" layoutY="170.0" text="Category 2" textFill="#fffdfd" />
             <Label layoutX="128.0" layoutY="230.0" text="Category 3" textFill="WHITE" />
@@ -57,16 +57,17 @@
             <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label layoutX="130.0" layoutY="39.0" text="0-0" textFill="WHITE">
+            <Label fx:id="scoreLabel" layoutX="130.0" layoutY="39.0" text="0-0" textFill="WHITE">
                <font>
                   <Font size="38.0" />
                </font>
             </Label>
-            <Button layoutX="126.0" layoutY="443.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="64.0" style="-fx-background-color: green;" text="PLAY" textFill="WHITE">
+            <Button fx:id="playButton" layoutX="126.0" layoutY="443.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="64.0" style="-fx-background-color: green;" text="PLAY" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
+            <Label fx:id="turnLabel" layoutX="122.0" layoutY="21.0" text="YOUR TURN" textFill="WHITE" />
          </children>
       </Pane>
    </children>

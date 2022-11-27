@@ -61,13 +61,10 @@ public class GameScene implements Initializable
     {
     }
 
-    public void startQuiz(String cat, Player player,int round, ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Socket socket, Question q, Boolean firstPlayerTurn)
+    public void startQuiz(String cat, Player player,int round, ObjectOutputStream output, ObjectInputStream input, Question q, Boolean firstPlayerTurn)
     {
-        this.socket = socket;
         this.output = output;
         this.input = input;
-        this.userInput = userInput;
-        this.answers = new ArrayList<>();
         this.currentRound = round;
         this.player = player;
         this.currentTurn = 1;
@@ -166,15 +163,15 @@ public class GameScene implements Initializable
 
             } catch (ClassCastException e)
             {
-                System.out.println("This is not a button");
+                System.out.println("Fix");
             }
         }
     }
     public void nextTurn() throws IOException, ClassNotFoundException
     {
         currentTurn++;
-        output.writeObject(category);
-        this.currentQuestion = (Question)input.readObject();
+        output.writeObject(category); // skicka till servern vilken kategori som gäller
+        this.currentQuestion = (Question)input.readObject(); // be servern om en fråga från denna kategori
         setQuestion();
     }
 
@@ -183,7 +180,6 @@ public class GameScene implements Initializable
         if (currentRound < numberOfRoundsPerGame)
         {
             currentRound++;
-            //MEDDELA SERVER ATT SPELARE 2 HAR KÖRT KLART
             switchPlayer();
         }
         else{
@@ -194,61 +190,27 @@ public class GameScene implements Initializable
 
     private void switchPlayer() throws IOException, ClassNotFoundException
     {
-        firstPlayerTurn = !firstPlayerTurn;
+        player.currentPlayer = false;
         output.writeObject(player); // skickar till servern att spelaren har kört klart
-        if(player.isCurrentPlayer()){
-            // wait for your turn
-            System.out.println(4);
-            keepGoing = (Boolean) input.readObject();
-            System.out.println("KEEP GOING ÄR: " + keepGoing);
-            if(keepGoing){
-                System.out.println("NU GÅR JAG TILL KATEGORIER");
-                switchToCategoryScene();
-                System.out.println();
-            }
-            else {
-                System.out.println("NU AVSLUTAS SPELET!");
-                endGame();
-            }
-
-            System.out.println(5);
-        }
-        else{
-            System.out.println(4);
-            input.readObject();
-            this.category = (String) input.readObject();
-            this.currentQuestion = (Question) input.readObject();
-            startQuiz(category, player, currentRound, output,input,userInput, socket, currentQuestion, false);
-        }
+        switchToScoreScene(false);
 
     }
 
-    private void endGame() throws IOException
+    private void endGame() throws IOException, ClassNotFoundException
     {
-        switchToScoreScene();
+        switchToScoreScene(true);
     }
 
 
 
-    public void switchToCategoryScene() throws IOException, ClassNotFoundException
-    {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("categoryScene.fxml"));
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
-        CategoryScene controller = loader.getController();
-        controller.run(output, input, userInput, socket, player, currentRound);
-        Stage stage = (Stage) gameGridPane.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void switchToScoreScene() throws IOException
+    private void switchToScoreScene(Boolean gameFinished) throws IOException, ClassNotFoundException
     {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Client.class.getResource("scoreScene.fxml"));
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
+        scoreController controller = loader.getController();
+        controller.run(output,input,userInput,player,currentRound,gameFinished);
         Stage stage = (Stage) answer1Button.getScene().getWindow();
         stage.setScene(scene);
         stage.show();

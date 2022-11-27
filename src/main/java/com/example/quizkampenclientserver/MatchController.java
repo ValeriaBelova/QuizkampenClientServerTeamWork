@@ -1,9 +1,12 @@
 package com.example.quizkampenclientserver;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,6 +46,7 @@ public class MatchController implements Initializable
         this.player1 = new Player("Player 1");
         this.player2 = new Player("Player 2");
         player1.setCurrentPlayer(true);
+        player1.setFirstPlayer(true);
     }
 
     public void buttonPressed(ActionEvent event) throws IOException, ClassNotFoundException
@@ -78,15 +82,83 @@ public class MatchController implements Initializable
         outputp2.flush();
         outputp1.writeObject(player1); // skicka player 1 till första användaren så att den kan läggas till i spelet
         outputp2.writeObject(player2); // skicka player 2 till andra användaren så att den kan läggas till i spelet
-        Boolean ready1 = false;
-        Boolean ready2 = false;
-        ready1 = (Boolean) inputp1.readObject(); // väntar på att spelare 1 ska trycka på start
-        ready2 = (Boolean) inputp2.readObject();
-        outputp1.writeObject(true); // berätta för player1 att spelet kan börja
-        outputp2.writeObject(true); // berätta för player2 att spelet kan börja
-        // Nu kan spelet börja
-        runGame();
+        goToScoreScene();
+    }
+    // Nu kan spelet börja
+    // runGame();
 
+    public void goToScoreScene() throws IOException, ClassNotFoundException
+    {
+        Question question1;
+        Question question2;
+        Question question3;
+        Question question4;
+        String category1;
+        String category2;
+
+
+        // RUNDA 1 ---------------------------------------------------------------
+
+        // FIRST PLAYER-----------------------------------------------------------
+        System.out.println("Sätter spelare 1 till currentPlayer...");
+        player1.setCurrentPlayer(true);
+        category1 = (String) inputp1.readObject(); // ta emot kategori från spelare 1
+        System.out.println("Tog emot kategori från spelare 1");
+        question1 = db.getRandomQuestionFromCategory(category1); // hämta en fråga från denna kategori
+        System.out.println("Hämtade en random fråga från kategorin: " + category1);
+        outputp1.writeObject(question1); // Skicka fråga 1 till spelare 1
+        System.out.println("Skickade fråga 1 till spelare 1");
+
+        category1 = (String) inputp1.readObject(); // ta emot kategori från spelare 1
+        System.out.println("Tog emot kategori från spelare 1");
+        question2 = db.getRandomQuestionFromCategory(category1); // hämta en fråga från denna kategori
+        System.out.println("Hämtade en random fråga från kategorin: " + category1);
+        outputp1.writeObject(question2); // Skicka fråga 2 till spelare 1
+        System.out.println("Skickade fråga 2 till spelare 1");
+
+        player1 = (Player) inputp1.readObject(); // player 1 har kört klart
+        System.out.println("Spelare 1 har kört klart");
+        // FIRST PLAYER DONE ------------------------------------------------------
+
+        // SECOND PLAYER ----------------------------------------------------------
+        player2.setCurrentPlayer(true);
+        outputp2.writeObject(player2); // meddelar spelare 2 att den kan börja spelet
+        outputp2.writeObject(category1); // skickar kategori 1 till spelare 2
+        outputp2.writeObject(question1); // skickar fråga 1 till spelare 2
+
+        category1 = (String) inputp2.readObject();
+        outputp2.writeObject(question2); // skickar fråga 2 till spelare 2
+        player2 = (Player) inputp2.readObject(); // player 2 har kört klart
+        // RUNDA 2 ----------------------------------------------------------------
+        // FIRST PLAYER-----------------------------------------------------------
+        player1.setCurrentPlayer(true);
+        outputp1.writeObject(player1); // meddelar spelare 1 att den kan börja spelet
+        category1 = (String) inputp1.readObject(); // ta emot kategori från spelare 1
+        System.out.println("Tog emot kategori från spelare 1");
+        question1 = db.getRandomQuestionFromCategory(category1); // hämta en fråga från denna kategori
+        System.out.println("Hämtade en random fråga från kategorin: " + category1);
+        outputp1.writeObject(question1); // Skicka fråga 1 till spelare 1
+        System.out.println("Skickade fråga 1 till spelare 1");
+
+        category1 = (String) inputp1.readObject(); // ta emot kategori från spelare 1
+        System.out.println("Tog emot kategori från spelare 1");
+        question2 = db.getRandomQuestionFromCategory(category1); // hämta en fråga från denna kategori
+        System.out.println("Hämtade en random fråga från kategorin: " + category1);
+        outputp1.writeObject(question2); // Skicka fråga 2 till spelare 1
+        System.out.println("Skickade fråga 2 till spelare 1");
+
+        player1 = (Player) inputp1.readObject(); // player 1 har kört klart
+
+        // SECOND PLAYER ----------------------------------------------------------
+        player2.setCurrentPlayer(true);
+        outputp2.writeObject(player2); // meddelar spelare 2 att den kan börja spelet
+        outputp2.writeObject(category1); // skickar kategori 1 till spelare 2
+        outputp2.writeObject(question1); // skickar fråga 1 till spelare 2
+
+        category1 = (String) inputp2.readObject();
+        outputp2.writeObject(question2); // skickar fråga 2 till spelare 2
+        player2 = (Player) inputp2.readObject(); // player 2 har kört klart
+        player1 = (Player) inputp2.readObject(); // player 2 har kört klart
 
     }
 

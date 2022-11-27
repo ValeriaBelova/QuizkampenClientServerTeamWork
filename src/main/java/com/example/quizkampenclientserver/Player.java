@@ -19,14 +19,14 @@ public class Player implements Serializable
         this.socket = socket;
         this.name = n;
         this.points = 0;
-        this.isFirstPlayer = true;
+        this.isFirstPlayer = false;
 
     }
 
     public Player(String n){
         this.name = n;
         this.points = 0;
-        this.isFirstPlayer = true;
+        this.isFirstPlayer = false;
     }
 
     public String getName()

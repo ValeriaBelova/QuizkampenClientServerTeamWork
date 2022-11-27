@@ -29,12 +29,11 @@ public class CategoryScene
     ObjectOutputStream output;
     ObjectInputStream input;
     BufferedReader userInput;
-    Socket socket;
     Player player;
     String category;
     Question question;
     int round = 1;
-    boolean turn;
+
 
 
     public void switchToQuizScene(ActionEvent event) throws IOException, ClassNotFoundException
@@ -42,14 +41,16 @@ public class CategoryScene
         if(player.currentPlayer){
             Button button = (Button) event.getSource();
             this.category = button.getText();
-            output.writeObject(category);
-            this.question = (Question) input.readObject();// hämta fråga från server
+            System.out.println("Player in category: " + player.getName());
+            output.writeObject(category); // Skicka till servern vilken kategori som spelaren har valt
+            System.out.println("Jag kom fram till rad 48");
+            this.question = (Question) input.readObject();// Be servern om en fråga i den kategorin
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Client.class.getResource("gameScene.fxml"));
             Parent parent = loader.load();
             Scene scene = new Scene(parent);
             GameScene controller = loader.getController();
-            controller.startQuiz(category, player, round, output,input,userInput, socket, question, true);
+            controller.startQuiz(category, player, round, output,input,question, true);
             Stage stage = (Stage) categoryLabel.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -72,10 +73,6 @@ public class CategoryScene
         this.userInput = userInput;
     }
 
-    public void setSocket(Socket socket)
-    {
-        this.socket = socket;
-    }
 
     public void setPlayer(Player player)
     {
@@ -97,14 +94,15 @@ public class CategoryScene
         this.round = round;
     }
 
-    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Socket socket, Player player, int round) throws IOException, ClassNotFoundException
+    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput,Player player, int round) throws IOException, ClassNotFoundException
     {
         setOutput(output);
         setInput(input);
         setUserInput(userInput);
-        setSocket(socket);
         setPlayer(player);
         setRound(round);
     }
+
+
 
 }

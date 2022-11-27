@@ -73,37 +73,21 @@ public class ClientController implements Initializable
                 if(!playerReady){
                     playerReady = true;
 
-                    try
+                    startLabel.setText("Waiting on other player to press start");
+                    PauseTransition wait = new PauseTransition(Duration.seconds(2));
+                    wait.setOnFinished(e ->
                     {
-                        output.writeObject(true); // meddela att spelaren har tryckt på start
-                        //stannat
-                        startLabel.setText("Waiting on other player to press start");
-                        PauseTransition wait = new PauseTransition(Duration.seconds(2));
-                        wait.setOnFinished(e ->
+                        try
                         {
-                            try
-                            {
-                                gameCanStart = (Boolean) input.readObject();
-                            } catch (IOException | ClassNotFoundException ex)
-                            {
-                                ex.printStackTrace();
-                            }
-                            startLabel.setText("Starting game...");
-                            try
-                            {
-                                startGame();
-                            } catch (IOException | ClassNotFoundException ex)
-                            {
-                                ex.printStackTrace();
-                            }
-                        });
-                        wait.play();
+                            goToScoreScene();
 
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
+                        } catch (IOException | ClassNotFoundException ex)
+                        {
+                            ex.printStackTrace();
+                        }
+                    });
+                    wait.play();
+
                 }
 
             });
@@ -114,6 +98,20 @@ public class ClientController implements Initializable
             e.printStackTrace();
         }
     }
+
+    private void goToScoreScene() throws IOException, ClassNotFoundException
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Client.class.getResource("scoreScene.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        scoreController controller = loader.getController();
+        controller.run(output, input, userInput, player, round, false);
+        Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
     private void startGame() throws IOException, ClassNotFoundException
     {
 
@@ -130,7 +128,7 @@ public class ClientController implements Initializable
                 Parent parent = loader.load();
                 Scene scene = new Scene(parent);
                 GameScene controller = loader.getController();
-                controller.startQuiz(category, player, round, output,input,userInput, socket, question, false);
+                controller.startQuiz(category, player, round, output,input, question, false);
                 Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
@@ -144,7 +142,7 @@ public class ClientController implements Initializable
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         CategoryScene controller = loader.getController();
-        controller.run(output, input, userInput, socket, player, 1);
+        controller.run(output, input, userInput, player, 1);
         Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
