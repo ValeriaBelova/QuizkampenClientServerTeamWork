@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.quizkampenclientserver.MatchController">
+   <children>
+      <Button fx:id="button" layoutX="212.0" layoutY="147.0" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="107.0" prefWidth="176.0" text="Button" />
+      <Label fx:id="serverLabel" layoutX="217.0" layoutY="68.0" prefHeight="13.0" prefWidth="166.0" text="CONNECTION ESTABLISHED" visible="false" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="clientAnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.quizkampenclientserver.ClientController">
+   <children>
+      <Label fx:id="startLabel" layoutX="119.0" layoutY="24.0" text="Waiting for connection to establish..." textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Button fx:id="startGameButton" layoutX="253.0" layoutY="341.0" mnemonicParsing="false" text="START GAME" />
+      <TextField fx:id="enterNameTextField" layoutX="275.0" layoutY="187.0" />
+      <Label fx:id="enterNameLabel" alignment="CENTER" layoutX="32.0" layoutY="186.0" prefHeight="28.0" prefWidth="229.0" text="ENTER YOUR NAME:" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Button fx:id="submitNameButton" layoutX="451.0" layoutY="187.0" mnemonicParsing="false" text="SUBMIT" />
+   </children>
+</AnchorPane>
