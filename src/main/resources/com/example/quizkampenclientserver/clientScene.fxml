@@ -13,7 +13,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <Button fx:id="startGameButton" layoutX="253.0" layoutY="341.0" mnemonicParsing="false" text="START GAME" />
+      <Button fx:id="startGameButton" layoutX="253.0" layoutY="341.0" mnemonicParsing="false"  text="START GAME" />
       <TextField fx:id="enterNameTextField" layoutX="275.0" layoutY="187.0" />
       <Label fx:id="enterNameLabel" alignment="CENTER" layoutX="32.0" layoutY="186.0" prefHeight="28.0" prefWidth="229.0" text="ENTER YOUR NAME:" textFill="WHITE">
          <font>

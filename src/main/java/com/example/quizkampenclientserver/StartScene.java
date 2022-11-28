@@ -29,7 +29,7 @@ public class StartScene
     public void switchToGameScene() throws IOException
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(ServerListener.class.getResource("choiceOfCategoryScreen.fxml")); //ändra detta sen
+        loader.setLocation(getClass().getResource("choiceOfCategoryScreen.fxml")); //ändra detta sen
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         Stage stage = (Stage) (startNewButton.getScene().getWindow());

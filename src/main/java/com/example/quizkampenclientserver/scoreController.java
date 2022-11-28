@@ -2,10 +2,12 @@ package com.example.quizkampenclientserver;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -26,6 +28,19 @@ public class scoreController implements Initializable
     public Label scoreLabel;
     public Button playButton;
     public Label turnLabel;
+    public Label score13;
+    public Label score11;
+    public Label score21;
+    public Label score12;
+    public Label score22;
+    public Label score23;
+    public Label score24;
+    public Label score14;
+    public Label score15;
+    public Label score25;
+    public Label score16;
+    public Label score26;
+    public AnchorPane scorePane;
     ObjectOutputStream output;
     ObjectInputStream input;
     BufferedReader userInput;
@@ -34,17 +49,25 @@ public class scoreController implements Initializable
     Question question;
     int round = 1;
     boolean gameFinished = false;
+    URL url;
+    ResourceBundle resourceBundle;
 
 
 
-    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Player player, int round, boolean gameFinished) throws IOException, ClassNotFoundException
+
+    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Player player, int round, boolean gameFinished, String id, int s ) throws IOException, ClassNotFoundException
     {
+        setScoreRound(id, s);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Client.class.getResource("scoreScene.fxml"));
+        loader.load();
         setPlayer(player);
         setRound(round);
         setOutput(output);
         setInput(input);
         setUserInput(userInput);
         setGameFinished(gameFinished);
+
 
         if(gameFinished){
             System.out.println("Spelet är slut");
@@ -76,6 +99,8 @@ public class scoreController implements Initializable
                     }
                 });
             }
+
+
             else{
                 turnLabel.setText("WAIT FOR YOUR TURN");
                 System.out.println("Väntar på att det ska bli min tur att få spela");
@@ -139,7 +164,22 @@ public class scoreController implements Initializable
         stage.setScene(scene);
         stage.show();
     }
-
+    public void setScoreRound(String id, int s){
+        Label l;
+        System.out.println(id);
+        System.out.println(id.length());
+        for(Node n: scorePane.getChildren()){
+            try{
+                l = (Label) n;
+                if(id.equals(l.getId())){
+                    l.setText(String.valueOf(s));
+                }
+            }
+            catch (Exception e){
+                System.out.println("Ignore this.");
+            }
+        }
+    }
     public void setPlayer2Label(Label player2Label)
     {
         Player2Label = player2Label;
@@ -189,9 +229,18 @@ public class scoreController implements Initializable
         this.round = round;
     }
 
+    public void setAvatar1(Circle avatar1)
+    {
+        this.avatar1 = avatar1;
+    }
+
+    public void setScore(String score)
+    {
+        scoreLabel.setText(score);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-
     }
 }

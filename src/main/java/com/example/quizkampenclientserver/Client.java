@@ -26,6 +26,5 @@ public class Client extends Application
         stage.setTitle("Client");
         stage.setScene(scene);
         stage.show();
-
     }
 }

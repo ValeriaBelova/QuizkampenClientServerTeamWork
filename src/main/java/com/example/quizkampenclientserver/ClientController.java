@@ -2,6 +2,7 @@ package com.example.quizkampenclientserver;
 
 
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -46,7 +47,6 @@ public class ClientController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-
         System.out.println("Jag kom hit");
         int port = 55557;
         try{
@@ -54,49 +54,50 @@ public class ClientController implements Initializable
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
             this.userInput = new BufferedReader(new InputStreamReader(System.in));
+
         } catch (IOException e)
         {
             e.printStackTrace();
         }
+
         try
         {
-            this.player = (Player) input.readObject(); // ta emot spelaren
-            startLabel.setText("Connection has been established! \n" +
-                    "Hello " + player.getName());
-            // SKRIV IN NAMN
-            submitNameButton.setOnAction(event -> {
-                player.setName(enterNameTextField.getText());
-                startLabel.setText("Hello " + player.name + "\nStart game by pressing the button Start game!");
-            });
-            // STARTA SPELET
-            startGameButton.setOnAction(event -> {
-                if(!playerReady){
-                    playerReady = true;
-
-                    startLabel.setText("Waiting on other player to press start");
-                    PauseTransition wait = new PauseTransition(Duration.seconds(2));
-                    wait.setOnFinished(e ->
-                    {
-                        try
-                        {
-                            goToScoreScene();
-
-                        } catch (IOException | ClassNotFoundException ex)
-                        {
-                            ex.printStackTrace();
-                        }
-                    });
-                    wait.play();
-
-                }
-
-            });
-
-
+            this.player = (Player) input.readObject();
         } catch (IOException | ClassNotFoundException e)
         {
             e.printStackTrace();
         }
+        startLabel.setText("Connection has been established!");
+        // SKRIV IN NAMN
+        submitNameButton.setOnAction(event -> {
+            player.setName(enterNameTextField.getText());
+            startLabel.setText("Start game " + player.getName());
+
+        });
+        // STARTA SPELET
+        startGameButton.setOnAction(event -> {
+            if(!playerReady){
+                playerReady = true;
+                startLabel.setText("Waiting on other player to press start");
+                PauseTransition wait = new PauseTransition(Duration.seconds(2));
+                wait.setOnFinished(e ->
+                {
+                    try
+                    {
+                        goToScoreScene();
+
+                    } catch (IOException | ClassNotFoundException ex)
+                    {
+                        ex.printStackTrace();
+                    }
+                });
+                wait.play();
+
+            }
+
+        });
+
+
     }
 
     private void goToScoreScene() throws IOException, ClassNotFoundException
@@ -106,47 +107,19 @@ public class ClientController implements Initializable
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         scoreController controller = loader.getController();
-        controller.run(output, input, userInput, player, round, false);
+        controller.run(output, input, userInput, player, round, false, " ", 0);
         Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
 
-    private void startGame() throws IOException, ClassNotFoundException
+    /*
+    public void startGame(ActionEvent event) throws IOException, ClassNotFoundException
     {
 
-            if(player.isCurrentPlayer()){
-                goToCategoryScene();
-            }
-            else {
-                input.readObject(); // väntar på att spelare 1 har kört klart sin runda
-                this.category = (String) input.readObject();
-                this.question = (Question) input.readObject();
-                this.round = 1;
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Client.class.getResource("gameScene.fxml"));
-                Parent parent = loader.load();
-                Scene scene = new Scene(parent);
-                GameScene controller = loader.getController();
-                controller.startQuiz(category, player, round, output,input, question, false);
-                Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-            }
-
-    }
-    private void goToCategoryScene() throws IOException, ClassNotFoundException
-    {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("categoryScene.fxml"));
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
-        CategoryScene controller = loader.getController();
-        controller.run(output, input, userInput, player, 1);
-        Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        goToScoreScene();
     }
 
+     */
 }
 // Lägg till textfield så att man kan skriva in sitt namn

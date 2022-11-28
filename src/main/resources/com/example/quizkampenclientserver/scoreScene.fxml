@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.quizkampenclientserver.scoreController">
+<AnchorPane fx:id="scorePane" prefHeight="500.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.quizkampenclientserver.scoreController">
    <children>
       <Pane prefHeight="500.0" prefWidth="321.0" style="-fx-background-color: blue;">
          <children>
@@ -17,46 +17,10 @@
             <Label layoutX="128.0" layoutY="170.0" text="Category 2" textFill="#fffdfd" />
             <Label layoutX="128.0" layoutY="230.0" text="Category 3" textFill="WHITE" />
             <Label layoutX="128.0" layoutY="290.0" text="Category 4" textFill="WHITE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="120.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="120.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="120.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fx:id="avatar1" fill="DODGERBLUE" layoutX="56.0" layoutY="63.0" radius="24.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fx:id="avatar2" fill="DODGERBLUE" layoutX="266.0" layoutY="63.0" radius="24.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="119.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="119.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="179.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="238.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="239.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="238.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="238.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="239.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="239.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="299.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Label layoutX="128.0" layoutY="350.0" text="Category 5" textFill="WHITE" />
             <Label layoutX="127.0" layoutY="410.0" text="Category 6" textFill="WHITE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="119.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="359.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="56.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="80.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="32.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="266.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="242.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" layoutX="290.0" layoutY="419.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Label fx:id="scoreLabel" layoutX="130.0" layoutY="39.0" text="0-0" textFill="WHITE">
                <font>
                   <Font size="38.0" />
@@ -68,6 +32,18 @@
                </font>
             </Button>
             <Label fx:id="turnLabel" layoutX="122.0" layoutY="21.0" text="YOUR TURN" textFill="WHITE" />
+            <Label fx:id="score13" layoutX="41.0" layoutY="239.0" />
+            <Label fx:id="score11" layoutX="41.0" layoutY="110.0" />
+            <Label fx:id="score21" layoutX="255.0" layoutY="109.0" />
+            <Label fx:id="score12" layoutX="46.0" layoutY="171.0" />
+            <Label fx:id="score22" layoutX="263.0" layoutY="172.0" />
+            <Label fx:id="score23" layoutX="255.0" layoutY="230.0" />
+            <Label fx:id="score24" layoutX="255.0" layoutY="292.0" />
+            <Label fx:id="score14" layoutX="34.0" layoutY="292.0" />
+            <Label fx:id="score15" layoutX="34.0" layoutY="350.0" />
+            <Label fx:id="score25" layoutX="255.0" layoutY="350.0" />
+            <Label fx:id="score16" layoutX="30.0" layoutY="410.0" />
+            <Label fx:id="score26" layoutX="255.0" layoutY="410.0" />
          </children>
       </Pane>
    </children>

@@ -56,9 +56,14 @@ public class GameScene implements Initializable
     BufferedReader userInput;
     Socket socket;
     Boolean keepGoing;
+    String labelId;
+    int scoreForThisRound = 0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        // här ska man hämta från properties-filen
+        setNumberOfRoundsPerGame(2);
+        setNumberOfTurnsPerRound(2);
     }
 
     public void startQuiz(String cat, Player player,int round, ObjectOutputStream output, ObjectInputStream input, Question q, Boolean firstPlayerTurn)
@@ -104,6 +109,7 @@ public class GameScene implements Initializable
         if (button.getText().equals(correctAnswer))
         {
            player.setPoints(player.getPoints() + 1);
+           scoreForThisRound ++;
         }
         showCorrectAnswer();
         PauseTransition wait = new PauseTransition(Duration.seconds(2));
@@ -192,6 +198,26 @@ public class GameScene implements Initializable
     {
         player.currentPlayer = false;
         output.writeObject(player); // skickar till servern att spelaren har kört klart
+        /*
+        DET HÄR FÖR LABELS
+        currentRound = 3;
+        int spelare = 0;
+        if(player.isFirstPlayer){
+            spelare = 1;
+        }
+        String buttonlabel = "score" + currentRound + spelare;
+        buttonlabel = "score13";
+        setPlayerLabel(buttonlabel) = scoreForThisRound;
+
+         */
+        int playerIndex = 0;
+        if(player.isFirstPlayer){
+            playerIndex = 1;
+        }
+        else {
+            playerIndex = 2;
+        }
+        this.labelId = "score" + playerIndex + currentRound;
         switchToScoreScene(false);
 
     }
@@ -210,10 +236,26 @@ public class GameScene implements Initializable
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         scoreController controller = loader.getController();
-        controller.run(output,input,userInput,player,currentRound,gameFinished);
+        // TODO
+        //controller.setScoreRound(labelId, scoreForThisRound);
+        controller.run(output,input,userInput,player,currentRound,gameFinished, labelId, scoreForThisRound);
         Stage stage = (Stage) answer1Button.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
 
+    public void setPlayerLabel(Label playerLabel)
+    {
+        this.playerLabel = playerLabel;
+    }
+
+    public void setNumberOfTurnsPerRound(int numberOfTurnsPerRound)
+    {
+        this.numberOfTurnsPerRound = numberOfTurnsPerRound;
+    }
+
+    public void setNumberOfRoundsPerGame(int numberOfRoundsPerGame)
+    {
+        this.numberOfRoundsPerGame = numberOfRoundsPerGame;
+    }
 }
