@@ -18,21 +18,18 @@ public class serverListener
                 System.out.println("Player 1 connected");
                 Socket socket2 = serverSocket.accept();
                 MatchController controller2 = new MatchController(socket2);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Player 2 connected");
-                        try
-                        {
-                            new startGameWithTwoPlayers(controller1, controller2);
-                        } catch (IOException | ClassNotFoundException e)
-                        {
-                            e.printStackTrace();
-                        }
-                        System.out.println("CONNECTED");
+                new Thread(() ->
+                {
+                    System.out.println("Player 2 connected");
+                    try
+                    {
+                        new startGameWithTwoPlayers(controller1, controller2);
+                    } catch (IOException | ClassNotFoundException e)
+                    {
+                        e.printStackTrace();
                     }
                 }).start();
-
+                System.out.println("CONNECTED");
 
 
             }

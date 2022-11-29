@@ -52,10 +52,7 @@ public class GameScene implements Initializable
     int numberOfRoundsPerGame = 2;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ArrayList<Boolean> answers;
     BufferedReader userInput;
-    Socket socket;
-    Boolean keepGoing;
     String labelId;
     int scoreForThisRound = 0;
     @Override
@@ -93,7 +90,7 @@ public class GameScene implements Initializable
                 index++;
             } catch (ClassCastException e)
             {
-                System.out.println("Fix");
+                System.out.println("Ignore.");
             }
         }
         playerLabel.setText("Player: " + player.getName());
@@ -111,6 +108,7 @@ public class GameScene implements Initializable
            player.setPoints(player.getPoints() + 1);
            scoreForThisRound ++;
         }
+        player.questionsAnswered ++;
         showCorrectAnswer();
         PauseTransition wait = new PauseTransition(Duration.seconds(2));
         wait.setOnFinished(event ->
@@ -129,10 +127,22 @@ public class GameScene implements Initializable
             }
             else if(firstPlayerTurn)
             {
-                //nextRound();
                 try
                 {
-                    switchPlayer();
+                    ArrayList<String> array = player.getScoreArray();
+                    array.set(currentRound - 1, String.valueOf(scoreForThisRound));
+                    player.setScoreArray(array);
+                    System.out.println(currentRound);
+                    System.out.println("Array: "  + array);
+                    if(player.questionsAnswered == 2 * player.getScoreArray().size()){
+                        System.out.println("End game");
+                        endGame();
+                    }
+                    else {
+                        System.out.println("switch");
+                        switchPlayer();
+                    }
+
                 } catch (IOException | ClassNotFoundException e)
                 {
                     e.printStackTrace();
@@ -185,45 +195,32 @@ public class GameScene implements Initializable
     {
         if (currentRound < numberOfRoundsPerGame)
         {
-            currentRound++;
+            System.out.println(currentRound);
+            ArrayList<String> array = player.getScoreArray();
+            array.set(currentRound - 1, String.valueOf(scoreForThisRound));
+            player.setScoreArray(array);
             switchPlayer();
         }
         else{
-            output.writeObject(player);
+            ArrayList<String> array = player.getScoreArray();
+            array.set(currentRound - 1, String.valueOf(scoreForThisRound));
+            player.setScoreArray(array);
             endGame();
         }
     }
 
     private void switchPlayer() throws IOException, ClassNotFoundException
     {
+        currentRound++;
         player.currentPlayer = false;
         output.writeObject(player); // skickar till servern att spelaren har kört klart
-        /*
-        DET HÄR FÖR LABELS
-        currentRound = 3;
-        int spelare = 0;
-        if(player.isFirstPlayer){
-            spelare = 1;
-        }
-        String buttonlabel = "score" + currentRound + spelare;
-        buttonlabel = "score13";
-        setPlayerLabel(buttonlabel) = scoreForThisRound;
-
-         */
-        int playerIndex = 0;
-        if(player.isFirstPlayer){
-            playerIndex = 1;
-        }
-        else {
-            playerIndex = 2;
-        }
-        this.labelId = "score" + playerIndex + currentRound;
         switchToScoreScene(false);
-
     }
 
     private void endGame() throws IOException, ClassNotFoundException
     {
+        player.currentPlayer = false;
+        output.writeObject(player); // skickar till servern att spelaren har kört klart
         switchToScoreScene(true);
     }
 
@@ -231,18 +228,16 @@ public class GameScene implements Initializable
 
     private void switchToScoreScene(Boolean gameFinished) throws IOException, ClassNotFoundException
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("scoreScene.fxml"));
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreScene.fxml"));
+        Parent root = loader.load();
         scoreController controller = loader.getController();
-        // TODO
-        //controller.setScoreRound(labelId, scoreForThisRound);
-        controller.run(output,input,userInput,player,currentRound,gameFinished, labelId, scoreForThisRound);
+        controller.run(output,input,userInput,player,currentRound,gameFinished, "", 0);
         Stage stage = (Stage) answer1Button.getScene().getWindow();
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
+
 
     public void setPlayerLabel(Label playerLabel)
     {

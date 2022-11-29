@@ -1,5 +1,6 @@
 package com.example.quizkampenclientserver;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -17,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class scoreController implements Initializable
@@ -40,11 +43,12 @@ public class scoreController implements Initializable
     public Label score25;
     public Label score16;
     public Label score26;
-    public AnchorPane scorePane;
+    public Pane scorePane;
     ObjectOutputStream output;
     ObjectInputStream input;
     BufferedReader userInput;
     Player player;
+    Player opponent;
     String category;
     Question question;
     int round = 1;
@@ -57,19 +61,33 @@ public class scoreController implements Initializable
 
     public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Player player, int round, boolean gameFinished, String id, int s ) throws IOException, ClassNotFoundException
     {
-        setScoreRound(id, s);
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("scoreScene.fxml"));
-        loader.load();
+        if(player.isCurrentPlayer()){
+            setTurnLabel("YOUR TURN");
+        }
+        else {
+            setTurnLabel("WAIT");
+        }
         setPlayer(player);
         setRound(round);
         setOutput(output);
         setInput(input);
         setUserInput(userInput);
         setGameFinished(gameFinished);
-
-
+        System.out.println(this.player.getScoreArray());
+        System.out.println(this.player.getScoreLabels());
+        setLabels(this.player);
+        this.opponent = (Player) input.readObject();
+        System.out.println(this.opponent.getScoreArray());
+        System.out.println(this.opponent.getScoreLabels());
+        setLabels(this.opponent);
+        System.out.println("Current player: " + player.currentPlayer);
+        System.out.println("First player: " + player.isFirstPlayer);
         if(gameFinished){
+            setLabels(this.player);
+            if(this.player.isFirstPlayer()){
+                this.opponent = (Player) input.readObject();
+                setLabels(this.opponent);
+            }
             System.out.println("Spelet är slut");
             turnLabel.setText("GAME FINISHED!");
         }
@@ -77,7 +95,6 @@ public class scoreController implements Initializable
             System.out.println("Kollar om det är min tur...");
             if(this.player.currentPlayer){
                 System.out.println("Det är min tur...");
-                turnLabel.setText("YOUR TURN");
                 playButton.setOnAction(event -> {
                     try
                     {
@@ -102,17 +119,15 @@ public class scoreController implements Initializable
 
 
             else{
-                turnLabel.setText("WAIT FOR YOUR TURN");
+                turnLabel.setText("WAIT");
                 System.out.println("Väntar på att det ska bli min tur att få spela");
-                // // vänta på din tur
-                System.out.println("Nu är det min tur...");
-                turnLabel.setText("YOUR TURN");
                 playButton.setOnAction(event -> {
                     try
                     {
                         setPlayer((Player) this.input.readObject());
                         System.out.println("Kollar om jag är player 1...");
                         if(this.player.isFirstPlayer()){
+
                             System.out.println("Jag är spelare 1...");
                             System.out.println("Nu ska jag välja kategori...");
                             goToCategoryScene();
@@ -126,6 +141,7 @@ public class scoreController implements Initializable
                             System.out.println("Väntar på att servern ska ge mig en fråga från kategorin " + this.category);
                             this.question = (Question) this.input.readObject();
                             System.out.println("Frågan mottagen...");
+
                             goToGameScene(false);
                         }
                     } catch (IOException | ClassNotFoundException e)
@@ -133,6 +149,28 @@ public class scoreController implements Initializable
                         e.printStackTrace();
                     }
                 });
+            }
+        }
+
+
+    }
+
+    private void setLabels(Player p)
+    {
+        Label l;
+        int index = 0;
+        for(String s: p.getScoreLabels()){
+            for(Node n: scorePane.getChildren()){
+                try{
+                    l = (Label) n;
+                    if(s.equals(l.getId())){
+                        l.setText(p.getScoreArray().get(index));
+                        index++;
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("Ignore this.");
+                }
             }
         }
 
@@ -159,26 +197,19 @@ public class scoreController implements Initializable
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         CategoryScene controller = loader.getController();
-        controller.run(output, input, userInput, player, 1);
+        controller.run(output, input, userInput, player, round);
         Stage stage = (Stage) playButton.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
+
+
     public void setScoreRound(String id, int s){
-        Label l;
-        System.out.println(id);
-        System.out.println(id.length());
-        for(Node n: scorePane.getChildren()){
-            try{
-                l = (Label) n;
-                if(id.equals(l.getId())){
-                    l.setText(String.valueOf(s));
-                }
-            }
-            catch (Exception e){
-                System.out.println("Ignore this.");
-            }
-        }
+
+        System.out.println("id: " + id);
+        System.out.println(scorePane.getChildren());
+
     }
     public void setPlayer2Label(Label player2Label)
     {
@@ -237,6 +268,11 @@ public class scoreController implements Initializable
     public void setScore(String score)
     {
         scoreLabel.setText(score);
+    }
+
+    public void setTurnLabel(String s)
+    {
+        this.turnLabel.setText(s);
     }
 
     @Override

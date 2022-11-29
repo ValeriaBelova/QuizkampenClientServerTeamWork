@@ -102,13 +102,13 @@ public class ClientController implements Initializable
 
     private void goToScoreScene() throws IOException, ClassNotFoundException
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("scoreScene.fxml"));
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreScene.fxml"));
+        Parent root = loader.load();
         scoreController controller = loader.getController();
-        controller.run(output, input, userInput, player, round, false, " ", 0);
+        controller.run(output,input,userInput,player,round,false, "", 0);
         Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

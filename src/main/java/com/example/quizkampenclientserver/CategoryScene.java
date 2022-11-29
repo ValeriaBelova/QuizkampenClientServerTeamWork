@@ -41,9 +41,7 @@ public class CategoryScene
         if(player.currentPlayer){
             Button button = (Button) event.getSource();
             this.category = button.getText();
-            System.out.println("Player in category: " + player.getName());
             output.writeObject(category); // Skicka till servern vilken kategori som spelaren har valt
-            System.out.println("Jag kom fram till rad 48");
             this.question = (Question) input.readObject();// Be servern om en fråga i den kategorin
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Client.class.getResource("gameScene.fxml"));

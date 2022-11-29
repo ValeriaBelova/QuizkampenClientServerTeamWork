@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class MatchController
@@ -87,7 +89,17 @@ public class MatchController
         //setPlayer2(new Player("Player 2"));
         // player1.setCurrentPlayer(true);
         // player1.setFirstPlayer(true);
+        int numberOfTurnsPerRound = 2;
+        int numberOfRoundsPerGame = 2;
+        ArrayList<String> scoreArray = new ArrayList<>();
+        for (int i = 0; i < numberOfRoundsPerGame; i++){
+            scoreArray.add("");
+        }
+
         setPlayer(new Player("Player"));
+        player.setScoreArray(scoreArray);
+        player.setNumberOfRoundsPerGame(numberOfRoundsPerGame);
+        player.setNumberOfTurnsPerRound(numberOfTurnsPerRound);
         setSocket(socket);
         try
         {
