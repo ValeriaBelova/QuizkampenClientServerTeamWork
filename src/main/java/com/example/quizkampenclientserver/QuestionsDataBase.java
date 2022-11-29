@@ -87,14 +87,21 @@ public class QuestionsDataBase
         Random rand = new Random();
         int randomIndex;
         ArrayList<Question> arrayOfQuestions = getQuestionsFromCategory(category);
+        /*
         while (true){
             randomIndex = rand.nextInt(getNumberOfQuestionsFromCategory(category));
             Question question = arrayOfQuestions.get(randomIndex);
+
             if (!question.isTaken()){
                 question.taken = true;
                 return question;
             }
         }
+
+         */
+        randomIndex = rand.nextInt(getNumberOfQuestionsFromCategory(category));
+        return arrayOfQuestions.get(randomIndex);
+
     }
 
     public int getNumberOfQuestionsFromCategory(String category){

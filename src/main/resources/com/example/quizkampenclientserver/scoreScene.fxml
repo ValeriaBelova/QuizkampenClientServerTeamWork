@@ -21,17 +21,12 @@
             <Circle fx:id="avatar2" fill="DODGERBLUE" layoutX="266.0" layoutY="63.0" radius="24.0" stroke="BLACK" strokeType="INSIDE" />
             <Label layoutX="128.0" layoutY="350.0" text="Category 5" textFill="WHITE" />
             <Label layoutX="127.0" layoutY="410.0" text="Category 6" textFill="WHITE" />
-            <Label fx:id="scoreLabel" layoutX="130.0" layoutY="39.0" text="0-0" textFill="WHITE">
-               <font>
-                  <Font size="38.0" />
-               </font>
-            </Label>
             <Button fx:id="playButton" layoutX="126.0" layoutY="443.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="64.0" style="-fx-background-color: green;" text="PLAY" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Label fx:id="turnLabel" layoutX="122.0" layoutY="21.0" text="YOUR TURN" textFill="WHITE" />
+            <Label fx:id="turnLabel" alignment="CENTER" layoutX="122.0" layoutY="21.0" text="YOUR TURN" textFill="WHITE" />
             <Label fx:id="score13" layoutX="49.0" layoutY="224.0" textFill="WHITE">
                <font>
                   <Font size="25.0" />
@@ -80,6 +75,21 @@
                <font>
                   <Font size="25.0" />
                </font></Label>
+            <Label fx:id="hyphenLabel" layoutX="153.0" layoutY="48.0" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="score1Label" layoutX="123.0" layoutY="48.0" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="score2Label" layoutX="184.0" layoutY="48.0" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

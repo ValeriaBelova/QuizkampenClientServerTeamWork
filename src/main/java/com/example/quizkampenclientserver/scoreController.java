@@ -46,6 +46,9 @@ public class scoreController implements Initializable
     public Label score16;
     public Label score26;
     public Pane scorePane;
+    public Label score1Label;
+    public Label score2Label;
+    public Label hyphenLabel;
     ObjectOutputStream output;
     ObjectInputStream input;
     BufferedReader userInput;
@@ -86,27 +89,32 @@ public class scoreController implements Initializable
 
         this.opponent = (Player) input.readObject(); // fråga servern efter motståndar-player för att sätta dess labels
 
+        if(!player.isFirstPlayer() && gameFinished){
+            setHyphenLabel("-");
+            setScore1Label(String.valueOf(this.opponent.getPoints()));
+            setScore2Label(String.valueOf(this.player.getPoints()));
+        }
         System.out.println(this.opponent.getScoreArray());
         System.out.println(this.opponent.getScoreLabels());
 
         setLabels(this.opponent);
-
         System.out.println("Current player: " + player.currentPlayer);
         System.out.println("First player: " + player.isFirstPlayer);
         if(gameFinished){
             setLabels(this.player);
-
+            setHyphenLabel("-");
             if(this.player.isFirstPlayer()){
+                setScore1Label(String.valueOf(this.player.getPoints()));
                 this.opponent = (Player) input.readObject();
                 PauseTransition wait = new PauseTransition(Duration.seconds(2));
                 wait.setOnFinished(e ->
                 {
                     setLabels(this.opponent);
+                    setScore2Label(String.valueOf(this.opponent.getPoints()));
                 });
                 wait.play();
-
-
             }
+
             System.out.println("Spelet är slut");
             turnLabel.setText("GAME FINISHED!");
         }
@@ -223,13 +231,6 @@ public class scoreController implements Initializable
     }
 
 
-
-    public void setScoreRound(String id, int s){
-
-        System.out.println("id: " + id);
-        System.out.println(scorePane.getChildren());
-
-    }
     public void setPlayer2Label(Label player2Label)
     {
         Player2Label = player2Label;
@@ -293,6 +294,12 @@ public class scoreController implements Initializable
     {
         this.turnLabel.setText(s);
     }
+
+    public void setHyphenLabel(String s){this.hyphenLabel.setText(s);}
+
+    public void setScore1Label(String s){this.score1Label.setText(s);}
+
+    public void setScore2Label(String s){this.score2Label.setText(s);}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
