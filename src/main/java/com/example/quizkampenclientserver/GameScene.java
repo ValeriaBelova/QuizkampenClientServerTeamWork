@@ -114,7 +114,7 @@ public class GameScene implements Initializable
         wait.setOnFinished(event ->
         {
             System.out.println("Current turn: " + currentTurn);
-            if (currentTurn < numberOfTurnsPerRound)
+            if (currentTurn < player.getNumberOfTurnsPerRound())
             {
 
                 try
@@ -129,18 +129,17 @@ public class GameScene implements Initializable
             {
                 try
                 {
+
+                    // sätt poäng för rundan
                     ArrayList<String> array = player.getScoreArray();
                     array.set(currentRound - 1, String.valueOf(scoreForThisRound));
                     player.setScoreArray(array);
-                    System.out.println(currentRound);
-                    System.out.println("Array: "  + array);
-                    if(player.questionsAnswered == 2 * player.getScoreArray().size()){
-                        System.out.println("End game");
-                        endGame();
+
+                    if(currentRound < player.getNumberOfRoundsPerGame()){
+                        switchPlayer();
                     }
                     else {
-                        System.out.println("switch");
-                        switchPlayer();
+                        endGame();
                     }
 
                 } catch (IOException | ClassNotFoundException e)
@@ -186,14 +185,14 @@ public class GameScene implements Initializable
     public void nextTurn() throws IOException, ClassNotFoundException
     {
         currentTurn++;
-        output.writeObject(category); // skicka till servern vilken kategori som gäller
+        //output.writeObject(category); // skicka till servern vilken kategori som gäller
         this.currentQuestion = (Question)input.readObject(); // be servern om en fråga från denna kategori
         setQuestion();
     }
 
     public void nextRound() throws IOException, ClassNotFoundException
     {
-        if (currentRound < numberOfRoundsPerGame)
+        if (currentRound < player.getNumberOfRoundsPerGame())
         {
             System.out.println(currentRound);
             ArrayList<String> array = player.getScoreArray();

@@ -84,13 +84,8 @@ public class MatchController
 
     public MatchController(Socket socket) throws IOException, ClassNotFoundException
     {
-
-        //setPlayer1(new Player("Player 1"));
-        //setPlayer2(new Player("Player 2"));
-        // player1.setCurrentPlayer(true);
-        // player1.setFirstPlayer(true);
         int numberOfTurnsPerRound = 2;
-        int numberOfRoundsPerGame = 2;
+        int numberOfRoundsPerGame = 6;
         ArrayList<String> scoreArray = new ArrayList<>();
         for (int i = 0; i < numberOfRoundsPerGame; i++){
             scoreArray.add("");

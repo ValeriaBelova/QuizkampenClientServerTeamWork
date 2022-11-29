@@ -1,5 +1,6 @@
 package com.example.quizkampenclientserver;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,26 +69,43 @@ public class scoreController implements Initializable
         else {
             setTurnLabel("WAIT");
         }
+
         setPlayer(player);
         setRound(round);
         setOutput(output);
         setInput(input);
         setUserInput(userInput);
+
         setGameFinished(gameFinished);
+
         System.out.println(this.player.getScoreArray());
         System.out.println(this.player.getScoreLabels());
+
+
         setLabels(this.player);
-        this.opponent = (Player) input.readObject();
+
+        this.opponent = (Player) input.readObject(); // fråga servern efter motståndar-player för att sätta dess labels
+
         System.out.println(this.opponent.getScoreArray());
         System.out.println(this.opponent.getScoreLabels());
+
         setLabels(this.opponent);
+
         System.out.println("Current player: " + player.currentPlayer);
         System.out.println("First player: " + player.isFirstPlayer);
         if(gameFinished){
             setLabels(this.player);
+
             if(this.player.isFirstPlayer()){
                 this.opponent = (Player) input.readObject();
-                setLabels(this.opponent);
+                PauseTransition wait = new PauseTransition(Duration.seconds(2));
+                wait.setOnFinished(e ->
+                {
+                    setLabels(this.opponent);
+                });
+                wait.play();
+
+
             }
             System.out.println("Spelet är slut");
             turnLabel.setText("GAME FINISHED!");
@@ -124,7 +143,7 @@ public class scoreController implements Initializable
                 playButton.setOnAction(event -> {
                     try
                     {
-                        setPlayer((Player) this.input.readObject());
+                        setPlayer((Player) this.input.readObject()); // här väntar spelaren på att serverns ska säga att det är deras tur
                         System.out.println("Kollar om jag är player 1...");
                         if(this.player.isFirstPlayer()){
 
@@ -136,10 +155,10 @@ public class scoreController implements Initializable
                             System.out.println("Jag är inte spelare 1...");
                             System.out.println("Nu går jag till spelet...");
                             System.out.println("väntar på att servern ska ge mig en kategori");
-                            this.category = (String) this.input.readObject();
+                            //this.category = (String) this.input.readObject();
                             System.out.println("Kategorin mottagen...");
                             System.out.println("Väntar på att servern ska ge mig en fråga från kategorin " + this.category);
-                            this.question = (Question) this.input.readObject();
+                            this.question = (Question) this.input.readObject(); // ta emot frågan
                             System.out.println("Frågan mottagen...");
 
                             goToGameScene(false);
