@@ -141,7 +141,7 @@ public class scoreController implements Initializable
             // DÅ SKA SPELAREN VÄNTA PÅ ATT ANDRA SPELAREN HAR KÖRT KLART
             else
             {
-                turnLabel.setText("Press play and wait");
+                //turnLabel.setText("Press play and wait");
                 playButton.setOnAction(event ->
                 {
                     try

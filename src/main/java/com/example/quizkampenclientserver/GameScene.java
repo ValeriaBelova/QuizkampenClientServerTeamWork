@@ -27,8 +27,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class GameScene implements Initializable
-{
+public class GameScene implements Initializable {
     @FXML
     private Label playerLabel;
     @FXML
@@ -52,14 +51,13 @@ public class GameScene implements Initializable
     ObjectInputStream input;
     BufferedReader userInput;
     int scoreForThisRound = 0;
+
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
     // DET HÄR KÖRS FRÅN SCORECONTROLLER
-    public void startQuiz(String cat, Player player,int round, ObjectOutputStream output, ObjectInputStream input, Question q, Boolean firstPlayerTurn)
-    {
+    public void startQuiz(String cat, Player player, int round, ObjectOutputStream output, ObjectInputStream input, Question q, Boolean firstPlayerTurn) {
         this.output = output;
         this.input = input;
         this.currentRound = round;
@@ -73,22 +71,20 @@ public class GameScene implements Initializable
     }
 
     // VISAR FRÅGAN
-    public void setQuestion()
-    {
+    public void setQuestion() {
         questionLabel.setText(currentQuestion.getDescription());
         // LOOPA GENOM ALLA BUTTONS OCH UPPDATERA DEM MED SVARSALTERNATIVEN FÖR FRÅGAN
         int index = 0;
-        for (Node n : gameGridPane.getChildren())
-        {
-            try
-            {
-                Button b = (Button) n;
-                b.setBackground(Background.fill(Color.LIGHTSKYBLUE));
-                b.setText(currentQuestion.getAnswers()[index]);
-                index++;
-            } catch (ClassCastException e)
-            {
-                System.out.println("Ignore.");
+        for (Node n : gameGridPane.getChildren()) {
+            if (n instanceof Button) {
+                try {
+                    Button b = (Button) n;
+                    b.setBackground(Background.fill(Color.LIGHTSKYBLUE));
+                    b.setText(currentQuestion.getAnswers()[index]);
+                    index++;
+                } catch (ClassCastException e) {
+                    System.out.println("Ignore.");
+                }
             }
         }
         // SÄTT LABELS FÖR SPELARENS NAMN, NUVARANDE RUNDA OCH NUVARANDE FRÅGA
@@ -98,23 +94,21 @@ public class GameScene implements Initializable
     }
 
     // OM SPELAREN TRYCKER PÅ ETT AV ALTERNATIVEN
-    public void checkAnswer(ActionEvent actionEvent)
-    {
+    public void checkAnswer(ActionEvent actionEvent) {
         // TA REDA PÅ VILKEN KNAPP SPELAREN TRYCKTE PÅ
         Button button = (Button) actionEvent.getSource();
         // HÄMTA DET KORREKTA SVARET
         String correctAnswer = currentQuestion.getAnswers()[currentQuestion.getCorrectAnswerindex()];
 
         // OM SPELAREN SVARADE RÄTT
-        if (button.getText().equals(correctAnswer))
-        {
+        if (button.getText().equals(correctAnswer)) {
             // LÄGG TILL ETT POÄNG I SPELARENS TOTALA POÄNG
             player.setPoints(player.getPoints() + 1);
             // LÄGG TILL ETT POÄNG FÖR NUVARANDE RUNDA
-            scoreForThisRound ++;
+            scoreForThisRound++;
         }
         // ÖKA ANTALET GÅNGER SPELAREN HAR SVARAT PÅ FRÅGOR
-        player.questionsAnswered ++;
+        player.questionsAnswered++;
         // VISA RÄTT SVAR
         showCorrectAnswer();
         // PAUSA FÖR ATT SPELAREN SKA SE RÄTT SVAR
@@ -122,28 +116,23 @@ public class GameScene implements Initializable
         wait.setOnFinished(event ->
         {
             // OM SPELAREN KAN KÖRA FLERA FRÅGOR
-            if (currentTurn < player.getNumberOfTurnsPerRound())
-            {
-                try
-                {
+            if (currentTurn < player.getNumberOfTurnsPerRound()) {
+                try {
                     // GÅ TILL NÄSTA FRÅGA
                     nextTurn();
-                } catch (IOException | ClassNotFoundException e)
-                {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
             // OM SPELAREN HAR KÖRT ALLA FRÅGOR OCH DET ÄR SPELAREN SOM VALT KATEGORI
-            else if(firstPlayerTurn)
-            {
-                try
-                {
+            else if (firstPlayerTurn) {
+                try {
                     // UPPDATERA SPELARENS POÄNG FÖR RUNDAN
                     ArrayList<String> array = player.getScoreArray();
                     array.set(currentRound - 1, String.valueOf(scoreForThisRound));
                     player.setScoreArray(array);
                     // KOLLA OM SPELAREN KAN KÖRA FLERA RUNDOR
-                    if(currentRound < player.getNumberOfRoundsPerGame()){
+                    if (currentRound < player.getNumberOfRoundsPerGame()) {
                         // BYT SPELARE
                         switchPlayer();
                     }
@@ -153,19 +142,16 @@ public class GameScene implements Initializable
                         endGame();
                     }
 
-                } catch (IOException | ClassNotFoundException e)
-                {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
             // OM SPELAREN HAR KÖRT ALLA FRÅGOR OCH DET INTE ÄR SPELAREN SOM VALT KATEGORI
             else {
-                try
-                {
+                try {
                     // GÅ TILL NÄSTA RUNDA
                     nextRound();
-                } catch (IOException | ClassNotFoundException e)
-                {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -173,55 +159,48 @@ public class GameScene implements Initializable
         wait.play();
     }
 
-    public void showCorrectAnswer()
-    {
+    public void showCorrectAnswer() {
         // HÄMTA KORREKT SVAR
         String correctAnswer = currentQuestion.getAnswers()[currentQuestion.getCorrectAnswerindex()];
         // LOOPA GENOM KNAPPARNA
-        for (Node n : gameGridPane.getChildren())
-        {
-            try
-            {
-                Button b = (Button) n;
-                // OM KNAPPEN HAR RÄTT SVARSALTERNATIV
-                if (b.getText().equals(correctAnswer))
-                {
-                    // GÖR KNAPPEN GRÖN
-                    b.setBackground(Background.fill(Color.LIMEGREEN));
-                }
-                // OM KNAPPEN INTE HAR RÄTT SVARSALTERNATIV
-                else
-                {
-                    // GÖR KNAPPEN RÖD
-                    b.setBackground(Background.fill(Color.RED));
-                }
+        for (Node n : gameGridPane.getChildren()) {
+            if (n instanceof Button) {
+                try {
+                    Button b = (Button) n;
+                    // OM KNAPPEN HAR RÄTT SVARSALTERNATIV
+                    if (b.getText().equals(correctAnswer)) {
+                        // GÖR KNAPPEN GRÖN
+                        b.setBackground(Background.fill(Color.LIMEGREEN));
+                    }
+                    // OM KNAPPEN INTE HAR RÄTT SVARSALTERNATIV
+                    else {
+                        // GÖR KNAPPEN RÖD
+                        b.setBackground(Background.fill(Color.RED));
+                    }
 
-            } catch (ClassCastException e)
-            {
-                System.out.println("Fixa knapp");
+                } catch (ClassCastException e) {
+                    System.out.println("Fixa knapp");
+                }
             }
         }
     }
-    public void nextTurn() throws IOException, ClassNotFoundException
-    {
+
+    public void nextTurn() throws IOException, ClassNotFoundException {
         // ÖKA ANTALET FRÅGOR SOM SVARATS
         currentTurn++;
         // BE SERVERN OM ATT FÅ EN NY FRÅGA
-        this.currentQuestion = (Question)input.readObject();
+        this.currentQuestion = (Question) input.readObject();
         // SÄTT NYA FRÅGAN
         setQuestion();
     }
 
-    public void nextRound() throws IOException, ClassNotFoundException
-    {
-        if (currentRound < player.getNumberOfRoundsPerGame())
-        {
+    public void nextRound() throws IOException, ClassNotFoundException {
+        if (currentRound < player.getNumberOfRoundsPerGame()) {
             ArrayList<String> array = player.getScoreArray();
             array.set(currentRound - 1, String.valueOf(scoreForThisRound));
             player.setScoreArray(array);
             switchPlayer();
-        }
-        else{
+        } else {
             ArrayList<String> array = player.getScoreArray();
             array.set(currentRound - 1, String.valueOf(scoreForThisRound));
             player.setScoreArray(array);
@@ -229,8 +208,7 @@ public class GameScene implements Initializable
         }
     }
 
-    private void switchPlayer() throws IOException, ClassNotFoundException
-    {
+    private void switchPlayer() throws IOException, ClassNotFoundException {
         // ÖKA ANTALET RUNDOR
         currentRound++;
         // DET ÄR INTE LÄNGRE NUVARANDE SPELARENS TUR
@@ -241,8 +219,7 @@ public class GameScene implements Initializable
         switchToScoreScene(false);
     }
 
-    private void endGame() throws IOException, ClassNotFoundException
-    {
+    private void endGame() throws IOException, ClassNotFoundException {
         // DET ÄR INTE LÄNGRE NUVARANDE SPELARENS TUR
         player.currentPlayer = false;
         // MEDDELA SERVERN ATT NUVARANDE SPELARE HAR KÖRT KLART
@@ -252,13 +229,11 @@ public class GameScene implements Initializable
     }
 
 
-
-    private void switchToScoreScene(Boolean gameFinished) throws IOException, ClassNotFoundException
-    {
+    private void switchToScoreScene(Boolean gameFinished) throws IOException, ClassNotFoundException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreScene.fxml"));
         Parent root = loader.load();
         scoreController controller = loader.getController();
-        controller.run(output,input,userInput,player,currentRound,gameFinished);
+        controller.run(output, input, userInput, player, currentRound, gameFinished);
         Stage stage = (Stage) answer1Button.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
