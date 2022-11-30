@@ -198,7 +198,7 @@ public class GameScene implements Initializable
 
             } catch (ClassCastException e)
             {
-                System.out.println("Fix");
+                System.out.println("Fixa knapp");
             }
         }
     }
@@ -216,7 +216,6 @@ public class GameScene implements Initializable
     {
         if (currentRound < player.getNumberOfRoundsPerGame())
         {
-            System.out.println(currentRound);
             ArrayList<String> array = player.getScoreArray();
             array.set(currentRound - 1, String.valueOf(scoreForThisRound));
             player.setScoreArray(array);

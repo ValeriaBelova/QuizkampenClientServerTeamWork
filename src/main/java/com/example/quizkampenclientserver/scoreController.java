@@ -181,7 +181,14 @@ public class scoreController implements Initializable
         {
             for (Node n : scorePane.getChildren())
             {
-                try
+                if (n instanceof Label){
+                    l = (Label) n;
+                    if (s.equals(l.getId()) && index<p.getScoreArray().size())
+                    {
+                        l.setText(p.getScoreArray().get(index));
+                        index++;
+                    }
+                /*try
                 {
                     l = (Label) n;
                     if (s.equals(l.getId()))
@@ -192,8 +199,8 @@ public class scoreController implements Initializable
                 } catch (Exception e)
                 {
                     System.out.println("Ignore this.");
-                }
-            }
+                }*/
+            }}
         }
     }
 
