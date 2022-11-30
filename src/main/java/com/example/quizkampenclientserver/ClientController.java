@@ -37,11 +37,8 @@ public class ClientController implements Initializable
     BufferedReader userInput;
     Socket socket;
     Player player;
-    String category;
-    Question question;
     int round = 1;
     public Boolean playerReady = false;
-    public Boolean gameCanStart = false;
 
     Boolean turn;
     @Override
@@ -106,20 +103,12 @@ public class ClientController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreScene.fxml"));
         Parent root = loader.load();
         scoreController controller = loader.getController();
-        controller.run(output,input,userInput,player,round,false, "", 0);
+        controller.run(output,input,userInput,player,round,false);
         Stage stage = (Stage) clientAnchorPane.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
-    /*
-    public void startGame(ActionEvent event) throws IOException, ClassNotFoundException
-    {
-
-        goToScoreScene();
-    }
-
-     */
 }
 // Lägg till textfield så att man kan skriva in sitt namn

@@ -30,7 +30,6 @@ public class scoreController implements Initializable
     public Label Player2Label;
     public Circle avatar1;
     public Circle avatar2;
-    public Label scoreLabel;
     public Button playButton;
     public Label turnLabel;
     public Label score13;
@@ -58,84 +57,78 @@ public class scoreController implements Initializable
     Question question;
     int round = 1;
     boolean gameFinished = false;
-    URL url;
-    ResourceBundle resourceBundle;
 
-
-
-
-    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Player player, int round, boolean gameFinished, String id, int s ) throws IOException, ClassNotFoundException
+    // DENNA METOD KÖRS BÅDE FRÅN CLIENTCONTROLLER NÄR SPELET BÖRJAR OCH FRÅN GAMESCENE
+    public void run(ObjectOutputStream output, ObjectInputStream input, BufferedReader userInput, Player player, int round, boolean gameFinished) throws IOException, ClassNotFoundException
     {
-        if(player.isCurrentPlayer()){
+        if (player.isCurrentPlayer())
+        {
             setTurnLabel("YOUR TURN");
         }
-        else {
-            setTurnLabel("WAIT");
-        }
-
+        // CONSTRUCTOR
         setPlayer(player);
         setRound(round);
         setOutput(output);
         setInput(input);
         setUserInput(userInput);
-
         setGameFinished(gameFinished);
 
-        System.out.println(this.player.getScoreArray());
-        System.out.println(this.player.getScoreLabels());
-
-
+        // UPPDATERA NUVARANDE SPELARES SCORE
         setLabels(this.player);
-
-        this.opponent = (Player) input.readObject(); // fråga servern efter motståndar-player för att sätta dess labels
-
-        if(!player.isFirstPlayer() && gameFinished){
-            setHyphenLabel("-");
-            setScore1Label(String.valueOf(this.opponent.getPoints()));
-            setScore2Label(String.valueOf(this.player.getPoints()));
-        }
-        System.out.println(this.opponent.getScoreArray());
-        System.out.println(this.opponent.getScoreLabels());
-
+        // fråga servern efter motståndar-player för att sätta dess labels
+        this.opponent = (Player) input.readObject();
+        // UPPDATERA MOTSTÅNDARENS SCORE
         setLabels(this.opponent);
-        System.out.println("Current player: " + player.currentPlayer);
-        System.out.println("First player: " + player.isFirstPlayer);
-        if(gameFinished){
+        // KOLLA OM SPELET ÄR SLUT
+        if (gameFinished)
+        {
+            // UPPDATERA NUVARANDE SPELARES SCORE
             setLabels(this.player);
-            setHyphenLabel("-");
-            if(this.player.isFirstPlayer()){
+            // OM DET ÄR SPELAREN SOM HAR VALT KATEGORI
+            if (this.player.isFirstPlayer())
+            {
+                // UPPDATERA SLUTRESULTAT
+                setHyphenLabel("-");
                 setScore1Label(String.valueOf(this.player.getPoints()));
+                // VÄNTA PÅ ATT ANDRA SPELAREN HAR KÖRT KLART SIN SISTA RUNDA
                 this.opponent = (Player) input.readObject();
-                PauseTransition wait = new PauseTransition(Duration.seconds(2));
-                wait.setOnFinished(e ->
-                {
-                    setLabels(this.opponent);
-                    setScore2Label(String.valueOf(this.opponent.getPoints()));
-                });
-                wait.play();
+                // UPPDATERA MOTSTÅNDARENS SCORE
+                setLabels(this.opponent);
+                // UPPDATERA MOTSTÅNDARENS SLUTRESULTAT
+                setScore2Label(String.valueOf(this.opponent.getPoints()));
             }
-
-            System.out.println("Spelet är slut");
+            // OM DET ÄR SPELAREN SOM INTE HAR VALT KATEGORI
+            else if (!player.isFirstPlayer())
+            {
+                // UPPDATERA SLUTRESULTAT
+                setHyphenLabel("-");
+                setScore1Label(String.valueOf(this.opponent.getPoints()));
+                setScore2Label(String.valueOf(this.player.getPoints()));
+            }
             turnLabel.setText("GAME FINISHED!");
         }
-        else{
-            System.out.println("Kollar om det är min tur...");
-            if(this.player.currentPlayer){
-                System.out.println("Det är min tur...");
-                playButton.setOnAction(event -> {
+        // OM SPELET INTE ÄR SLUT
+        else
+        {
+            // OM DET ÄR SPELARENS TUR ATT KÖRA EN RUNDA
+            // DÅ SKA SPELAREN ANTINGEN VÄLJA EN KATEGORI ELLER KÖRA EN RUNDA MED SAMMA FRÅGOR SOM TIDIGARE SPELARE
+            if (this.player.currentPlayer)
+            {
+                playButton.setOnAction(event ->
+                {
                     try
                     {
-                        System.out.println("Jag tryckte på startknappen");
-                        System.out.println("Kollar om jag är player 1...");
-                        if(this.player.isFirstPlayer()){
-                            System.out.println("Jag är player 1...");
-                            System.out.println("Nu ska jag välja kategori...");
+                        // OM DET ÄR SPELAREN SOM SKA VÄLJA KATEGORI
+                        if (this.player.isFirstPlayer())
+                        {
+                            // GÅ TILL KATEGORIER
                             goToCategoryScene();
                         }
-                        else {
-                            System.out.println("Jag är inte player 1...");
-                            System.out.println("Nu går jag till quizzet...");
-                            goToGameScene(false);
+                        // ANNARS
+                        else
+                        {
+                            // GÅ TILL FRÅGORNA
+                            goToGameScene(false); // false betyder att det är spelaren som inte ska välja kategori som kör
                         }
                     } catch (IOException | ClassNotFoundException e)
                     {
@@ -144,31 +137,29 @@ public class scoreController implements Initializable
                 });
             }
 
-
-            else{
-                turnLabel.setText("WAIT");
-                System.out.println("Väntar på att det ska bli min tur att få spela");
-                playButton.setOnAction(event -> {
+            // OM DET INTE ÄR SPELARENS TUR ATT KÖRA EN RUNDA
+            // DÅ SKA SPELAREN VÄNTA PÅ ATT ANDRA SPELAREN HAR KÖRT KLART
+            else
+            {
+                turnLabel.setText("Press play and wait");
+                playButton.setOnAction(event ->
+                {
                     try
                     {
+                        // VÄNTA PÅ ATT MOTSTÅNDAREN HAR KÖRT KLART
                         setPlayer((Player) this.input.readObject()); // här väntar spelaren på att serverns ska säga att det är deras tur
-                        System.out.println("Kollar om jag är player 1...");
-                        if(this.player.isFirstPlayer()){
-
-                            System.out.println("Jag är spelare 1...");
-                            System.out.println("Nu ska jag välja kategori...");
+                        turnLabel.setText("YOUR TURN");
+                        // OM DET ÄR SPELAREN SOM SKA VÄLJA KATEGORI SOM VÄNTAR
+                        if (this.player.isFirstPlayer())
+                        {
+                            // GÅ TILL KATEGORIER
                             goToCategoryScene();
-                        }
-                        else {
-                            System.out.println("Jag är inte spelare 1...");
-                            System.out.println("Nu går jag till spelet...");
-                            System.out.println("väntar på att servern ska ge mig en kategori");
-                            //this.category = (String) this.input.readObject();
-                            System.out.println("Kategorin mottagen...");
-                            System.out.println("Väntar på att servern ska ge mig en fråga från kategorin " + this.category);
+                        } else
+                        {
+                            // ANNARS
+                            // SÄTTER FRÅGAN SOM SKA SKICKAS TILL GAME SCENE
                             this.question = (Question) this.input.readObject(); // ta emot frågan
-                            System.out.println("Frågan mottagen...");
-
+                            // GÅ TILL GAME SCENE
                             goToGameScene(false);
                         }
                     } catch (IOException | ClassNotFoundException e)
@@ -186,22 +177,24 @@ public class scoreController implements Initializable
     {
         Label l;
         int index = 0;
-        for(String s: p.getScoreLabels()){
-            for(Node n: scorePane.getChildren()){
-                try{
+        for (String s : p.getScoreLabels())
+        {
+            for (Node n : scorePane.getChildren())
+            {
+                try
+                {
                     l = (Label) n;
-                    if(s.equals(l.getId())){
+                    if (s.equals(l.getId()))
+                    {
                         l.setText(p.getScoreArray().get(index));
                         index++;
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e)
+                {
                     System.out.println("Ignore this.");
                 }
             }
         }
-
-
     }
 
     private void goToGameScene(boolean b) throws IOException
@@ -211,7 +204,7 @@ public class scoreController implements Initializable
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         GameScene controller = loader.getController();
-        controller.startQuiz(category, player, round, output,input,question, b);
+        controller.startQuiz(category, player, round, output, input, question, b);
         Stage stage = (Stage) playButton.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -228,12 +221,6 @@ public class scoreController implements Initializable
         Stage stage = (Stage) playButton.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
-    }
-
-
-    public void setPlayer2Label(Label player2Label)
-    {
-        Player2Label = player2Label;
     }
 
     public void setOutput(ObjectOutputStream output)
@@ -255,24 +242,10 @@ public class scoreController implements Initializable
     {
         this.gameFinished = gameFinished;
     }
-    public void setPlayer1Label(Label player1Label)
-    {
-        this.player1Label = player1Label;
-    }
 
     public void setPlayer(Player player)
     {
         this.player = player;
-    }
-
-    public void setCategory(String category)
-    {
-        this.category = category;
-    }
-
-    public void setQuestion(Question question)
-    {
-        this.question = question;
     }
 
     public void setRound(int round)
@@ -280,26 +253,25 @@ public class scoreController implements Initializable
         this.round = round;
     }
 
-    public void setAvatar1(Circle avatar1)
-    {
-        this.avatar1 = avatar1;
-    }
-
-    public void setScore(String score)
-    {
-        scoreLabel.setText(score);
-    }
-
     public void setTurnLabel(String s)
     {
         this.turnLabel.setText(s);
     }
 
-    public void setHyphenLabel(String s){this.hyphenLabel.setText(s);}
+    public void setHyphenLabel(String s)
+    {
+        this.hyphenLabel.setText(s);
+    }
 
-    public void setScore1Label(String s){this.score1Label.setText(s);}
+    public void setScore1Label(String s)
+    {
+        this.score1Label.setText(s);
+    }
 
-    public void setScore2Label(String s){this.score2Label.setText(s);}
+    public void setScore2Label(String s)
+    {
+        this.score2Label.setText(s);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)

@@ -2,65 +2,25 @@ package com.example.quizkampenclientserver;
 
 import javafx.fxml.Initializable;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class MatchController
 {
-    QuestionsDataBase db;
-    Player player1;
-    Player player2;
     Player player;
     ObjectOutputStream output;
     ObjectInputStream input;
-    ObjectOutputStream outputp1;
-    ObjectInputStream inputp1;
-    ObjectOutputStream outputp2;
-    ObjectInputStream inputp2;
     Socket socket;
+    int numberOfTurnsPerRound = 0;
+    int numberOfRoundsPerGame = 0;
 
-    public void setDb(QuestionsDataBase db)
-    {
-        this.db = db;
-    }
-
-    public void setPlayer1(Player player1)
-    {
-        this.player1 = player1;
-    }
-
-    public void setPlayer2(Player player2)
-    {
-        this.player2 = player2;
-    }
-
-    public void setOutputp1(ObjectOutputStream outputp1)
-    {
-        this.outputp1 = outputp1;
-    }
-
-    public void setInputp1(ObjectInputStream inputp1)
-    {
-        this.inputp1 = inputp1;
-    }
-
-    public void setOutputp2(ObjectOutputStream outputp2)
-    {
-        this.outputp2 = outputp2;
-    }
-
-    public void setInputp2(ObjectInputStream inputp2)
-    {
-        this.inputp2 = inputp2;
-    }
 
     public void setSocket(Socket socket)
     {
@@ -84,10 +44,18 @@ public class MatchController
 
     public MatchController(Socket socket) throws IOException, ClassNotFoundException
     {
-        int numberOfTurnsPerRound = 2;
-        int numberOfRoundsPerGame = 6;
+        Properties p = new Properties();
+        try{
+            p.load(new FileInputStream("src/main/java/com/example/quizkampenclientserver/quizKampen.properties"));
+        }
+        catch (Exception e){
+            System.out.println("Filen kunde inte hittas");
+        }
+        this.numberOfTurnsPerRound = Integer.parseInt(p.getProperty("numberOfTurnsPerRound"));
+        this.numberOfRoundsPerGame = Integer.parseInt(p.getProperty("numberOfRoundsPerGame"));
+
         ArrayList<String> scoreArray = new ArrayList<>();
-        for (int i = 0; i < numberOfRoundsPerGame; i++){
+        for (int i = 0; i < this.numberOfRoundsPerGame; i++){
             scoreArray.add("");
         }
 
