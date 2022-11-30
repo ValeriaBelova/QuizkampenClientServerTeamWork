@@ -57,6 +57,7 @@ public class GameScene implements Initializable
     {
     }
 
+    // DET HÄR KÖRS FRÅN SCORECONTROLLER
     public void startQuiz(String cat, Player player,int round, ObjectOutputStream output, ObjectInputStream input, Question q, Boolean firstPlayerTurn)
     {
         this.output = output;
@@ -71,6 +72,7 @@ public class GameScene implements Initializable
         setQuestion();
     }
 
+    // VISAR FRÅGAN
     public void setQuestion()
     {
         questionLabel.setText(currentQuestion.getDescription());
